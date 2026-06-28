@@ -1,56 +1,125 @@
 # ####### ####### ####### ZADANIA – 2026.05.14 ####### ####### #######')
-#
-#
-#
+
+
+
 # ####### ####### ####### Zadanie 1 – Posortuj listę imion wg. długości ####### ####### #######
 #
-#     Posortuj listę imion wg długości imienia.
+# Posortuj listę imion wg. długości imienia.
+
+people = [
+    ('Basia', 23),
+    ('Ania', 19),
+    ('Katarzyna', 27),
+    ('Ola', 21),
+    ('Tomek', False, 30)
+     ]
+
+# sorted(collection) -> sortuje obiekt KOLEKCJI -> zawsze zwraca LISTĘ (w kolejności wg. ASCI)
+#   sorted(iterable, /.., *.., key=none, reverse=False) # W argumencie "key" wpisujemy jakiej FUNKCJI chcemy użyć, żeby posortować.
+
+def pobierz_dlugosc_imienia(element):
+    return len(element[0]) # Funkcja zwraca długość pierwszego elementu listy
+
+posortowana_lista = sorted(people, key=pobierz_dlugosc_imienia) # Sortuj według funkcji
+
+for element in posortowana_lista: # Pętla wyświetla posortowane wyniki
+    imie = element[0]
+    dlugosc = len(imie) # Sprawdź długość imienia
+    print(f'{imie}: {dlugosc} znaki.')
+
+
+
+# ####### ####### ####### Zadanie 2 – Posortuj listę imion wg. wieku ####### ####### #######
 #
-#     people = [
-#         ('Basia', 23),
-#         ('Ania', 19),
-#         ('Katarzyna', 27),
-#         ('Ola', 21),
-#         ('Tomek', False, 30)
-#     ]
+# Posortuj listę imion wg. wieku (każdorazowo ostatni element krotki).
+# sorted(people, key=lambda x: x[-1])
+# Gdzie x to każdym elementem wewnętrznym w LIŚCIE TUPLI ([-1], aby wyciągnąć ostatni element z każdej TUPLI).
+
+people = [
+    ('Basia', 23),
+    ('Ania', 19),
+    ('Katarzyna', 27),
+    ('Ola', 21),
+    ('Tomek', False, 30)
+     ]
+
+def pobierz_wiek(element):
+    return element[-1] # Funkcja zwraca ostatni elementu listy
+
+posortowana_lista = sorted(people, key=lambda x: x[-1]) # Sortuj i zwraca LISTĘ w kolejności wg. ASCI
+
+for element in posortowana_lista: # Pętla wyświetla posortowane wyniki
+    wiek = element[-1]
+    imie = element[0]
+    print(f'{wiek}, {imie}')
+
+
+
+# ####### ####### ####### Zadanie 3 – Generator haseł ####### ####### #######
 #
-#
-# ####### ####### ####### Zadanie 2 – Generator haseł ####### ####### #######
-#
-#     1. Dany jest moduł string.
-#     2. Zbuduj funkcję do generowania haseł.
-#     3. Funkcja powinna przyjmować następujące argumenty:
-#         -> żądana długość hasła,
-#         -> czy zawrzeć znaki specjalne:
-#             - jeśli True, to zawrzyj,
-#             - jeśli False, to nie zawieraj.
-#     4. Na końcu wymieszaj litery.
-#
-#
-#
-# ####### ####### ####### Zadanie 3 – Posortuj listę imion wg. wieku ####### ####### #######
-#
-#     Posortuj listę imion wg wieku (każdorazowo ostatni element krotki).
-#
-#     people = [
-#         ('Basia', 23),
-#         ('Ania', 19),
-#         ('Katarzyna', 27),
-#         ('Ola', 21),
-#         ('Tomek', False, 30)
-#     ]
-#
-#
-# ####### ####### ####### Zadanie 4 – Funkcja z dowolną liczbąe lementów ####### ####### #######
+#  1. Dany jest moduł string.
+#  2. Zbuduj funkcję do generowania haseł.
+#  3. Funkcja powinna przyjmować następujące argumenty:
+#     - Żądana długość hasła,
+#     - Czy zawrzeć znaki specjalne:
+#       - Jeśli True, to zawrzyj,
+#       - Jeśli False, to nie zawieraj.
+#  4. Na końcu wymieszaj litery.
+
+
+import string # Definiujemy zestawy znaków globalnie (raz na początku)
+import random
+
+def generate_random_pass(pass_len: int, spec_char: bool) -> str:
+    chars_pool = string.ascii_letters + string.digits
+    if spec_char:
+        chars_pool += string.punctuation
+    random_pass = random.choices(chars_pool, k=pass_len)
+    random.shuffle(random_pass)
+    return ''.join(random_pass)
+
+print(generate_random_pass(30, True))
+
+
+
+# ####### ####### ####### Zadanie 4 – Funkcja z dowolną liczbą elementów ####### ####### #######
 #
 #     Napisz funkcję, która przyjmie dowolną liczbę elementów.
 #     Wyodrębnij z niej liczby całkowite, pogrupuj odpowiednio i zwróć:
 #         -> liczby parzyste jako osobną listę,
 #         -> liczby nieparzyste w osobnej liście.
 #     Zignoruj wejścia inne niż integer.
-#
-#
-#
+
+### DOWOLNA liczba ARGUMENTÓW – *args
+# ARGUMENT POZYCYJNY to taki argument, który nie ma wartości domyślnej.
+# "*" przed nazwą argumentu liczby pełni rolę OPERATORA PAKOWANIA ARGUMENTÓW POZYCYJNYCH (tzw. *args).
+# Pozwala on na wywołanie FUNKCJI z dowolną liczbą wartości przekazanych po przecinku.
+# Wszystkie wartości przekazane podczas wywołania FUNKCJI zostają SPAKOWANE do jednej struktury danych – TUPLI o nazwie "liczby".
+# Wewnątrz funkcji możesz operować na niej jak na zwykłej kolekcji danych.
+# def dodaj_wiele(*liczby):
+#     return sum(liczby)
+# result = dodaj_wiele(1, 2, 3, 100, 200) # Mogę tutaj wpisać dowolną ilość wartości
+# print(result)
+
+def grupuj_liczby(*liczby):
+    parzyste = [] # Lista liczb parzystych
+    nieparzyste = [] # Lista liczb nieparzystych
+
+    for element in liczby:
+        if type(element) is int: # Jeżeli int to... (inne wartości – wartości bool)
+            if element % 2 == 0: # Jeśli liczba jest parzysta
+                parzyste.append(element) # dodaj do listy parzyste
+            else: # Jeśli liczba nieparzysta
+                nieparzyste.append(element) # dodaj do listy nieparzyste
+    return parzyste, nieparzyste
+
+wynik_parzyste, wynik_nieparzyste = grupuj_liczby(1, 2, 3.33, -5, 20, 123, 12.5, 100_000, 'Aga', False)
+
+print(f'Liczby parzyste: {wynik_parzyste}.')
+print(f'Liczby nieparzyste: {wynik_nieparzyste}.')
+
+
+
 # ####### ####### ####### Zadanie 5 – Funkcja – naturalna i narcystyczna ####### ####### #######
 #
 #     Napisz funkcję, która przyjmuje na wejściu liczbę naturalną
@@ -59,9 +128,25 @@
 #     Liczba narcystyczna to taka liczba, której suma cyfr
 #     podniesionych do potęgi długości tej liczby jest równa
 #     wartości tej liczby.
-#
-#
-#
+
+def liczba_narcystyczna(number: int) -> bool:
+    if not isinstance(number, int): # Tutaj odbywa się WALIDACJA wejścia. Jeżeli liczba nie jest INT
+        raise TypeError('Liczba musi być całkowita.') # to wyjdź z FUNKCJI i podnieś BŁĄD – tutaj jest tylko informacją
+    str_number = str(number) # Przypisujemy zmienną (przyda się późnej)
+    exponent = len(str_number) # Określamy wykładnik potęgi, aby mieć dynamicznie przypisany (zmienny) wykładnik.
+    cum_sum = 0 # Suma, która się kumuluje
+    for digit in str_number:
+        cum_sum += int(digit)**exponent
+    return cum_sum == number # Nie ma potrzeby pisać tutaj "if" ponieważ tutaj i tak otrzymujemy bool.
+
+number = int(input('Podaj liczbę: '))
+if liczba_narcystyczna(number):
+    print(f'Liczba {number} jest narcystyczna.')
+else:
+    print(f'Liczba {number} NIE jest narcystyczna.')
+
+
+
 # ####### ####### ####### Zadanie 6 – Funkcja Posortuj listę imion wg. wieku ####### ####### #######
 #
 #     Napisz funkcję, która jako argumenty przyjmie dwie liczby:
@@ -72,10 +157,10 @@
 #         -> sprawdź, czy początek zakresu nie jest większy niż koniec zakresu.
 #     2. Funkcja ma za zadanie zwracać listę wszystkich liczb
 #        narcystycznych z zadanego zakresu.
-#
-#
-# -> zadanie 7
-#     Gra w zgadywanie liczby.
+
+
+
+# ####### ####### ####### Zadanie 7 – Gra w zgadywanie liczby.
 #
 #     1. Komputer losuje liczbę całkowitą z danego przedziału.
 #     2. Użytkownik podaje liczbę, dopóki nie odgadnie liczby wylosowanej przez komputer.
@@ -85,10 +170,10 @@
 #     4. Zliczaj liczbę prób.
 #     5. Jeśli użytkownik nie odgadnie liczby w trakcie 5 prób,
 #        przerwij grę i wyświetl informację o porażce.
-#
-#
-# -> zadanie 8
-#     Napisz funkcję obliczającą pierwiatki równania kwadratowego y = ax^2 + b*x + c
+
+
+
+# ####### ####### ####### Zadanie 8 – Funkcja obliczająca pierwiatki równania kwadratowego y = ax^2 + b*x + c
 #
 #     1. Funkcja powinna przyjmować trzy argumenty:
 #         -> współczynnik a,
